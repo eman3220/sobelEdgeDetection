@@ -8,6 +8,8 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
 /**
+ * Author: Emmanuel Godinez 300251168
+ *
  * input: image file. Only use .png files.
  * (note: tiff images don't seem to like java's BufferedImage class)
  * output: image file with edge detection highlights
@@ -53,9 +55,17 @@ public class Sobel {
 					int b = (rgb & 0xFF);
 					int gray = (r + g + b) / 3;
 
-					img[j][i] = gray;
+					img[j][i] = gray*2;
 				}
 			}
+
+			//display original image
+			JFrame frame1 = new JFrame();
+			frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			frame1.setExtendedState(JFrame.MAXIMIZED_BOTH);
+			frame1.setSize((bi.getHeight() + 80), (bi.getWidth() + 80));
+			frame1.setVisible(true);
+			frame1.add(new mypanel(this.img));
 
 			// sweep image to find edges
 			for (int i = 0; i < bi.getWidth() - 1; i++) {
@@ -78,14 +88,16 @@ public class Sobel {
 					output[j][i] = avg;
 				}
 			}
+			// NOTE: we could just skip this entirely. just find a way to put everything
+			// into the final 2d array
 
 			// draw to frame
-			JFrame frame = new JFrame();
-			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-			frame.setSize((bi.getHeight() + 80), (bi.getWidth() + 80));
-			frame.setVisible(true);
-			frame.add(new mypanel(this.output));
+			JFrame frame2 = new JFrame();
+			frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			frame2.setExtendedState(JFrame.MAXIMIZED_BOTH);
+			frame2.setSize((bi.getHeight() + 80), (bi.getWidth() + 80));
+			frame2.setVisible(true);
+			frame2.add(new mypanel(this.output));
 
 		} catch (IOException e) {
 			e.printStackTrace();
