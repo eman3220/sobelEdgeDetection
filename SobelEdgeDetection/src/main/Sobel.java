@@ -60,7 +60,7 @@ public class Sobel {
 			}
 
 			//display original image
-			JFrame frame1 = new JFrame();
+			JFrame frame1 = new JFrame("Original");
 			frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			frame1.setExtendedState(JFrame.MAXIMIZED_BOTH);
 			frame1.setSize((bi.getHeight() + 80), (bi.getWidth() + 80));
@@ -92,7 +92,7 @@ public class Sobel {
 			// into the final 2d array
 
 			// draw to frame
-			JFrame frame2 = new JFrame();
+			JFrame frame2 = new JFrame("Edges");
 			frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			frame2.setExtendedState(JFrame.MAXIMIZED_BOTH);
 			frame2.setSize((bi.getHeight() + 80), (bi.getWidth() + 80));
