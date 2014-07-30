@@ -77,7 +77,7 @@ public class Sobel {
 					tb[j][i] = diff;
 				}
 			}
-			printImage(tb);
+
 
 			// left to right sweep
 			for (int i = 0; i < ras.getHeight() - 1; i++) {
@@ -92,6 +92,25 @@ public class Sobel {
 					// put into output array at the bottom pixel
 					lr[j][i] = diff;
 				}
+			}
+			printImage(lr);
+
+			// change this
+			for (int i = 0; i < ras.getHeight(); i++) {
+				for (int j = 0; j < ras.getWidth(); j++) {
+
+					int rgb = bi.getRGB(j, i);
+					int r = (rgb >> 16) & 0xFF;
+					int g = (rgb >> 8) & 0xFF;
+					int b = (rgb & 0xFF);
+
+					int gray = (r + g + b) / 3;
+
+					img[j][i] = gray;
+
+					// System.out.print(gray+" ");
+				}
+				// System.out.println();
 			}
 
 		} catch (IOException e) {
