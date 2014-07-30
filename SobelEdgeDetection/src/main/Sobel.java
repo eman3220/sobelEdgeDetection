@@ -99,6 +99,8 @@ public class Sobel {
 			frame2.setVisible(true);
 			frame2.add(new mypanel(this.output));
 
+			printImage(output);
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

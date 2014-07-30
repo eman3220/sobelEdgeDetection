@@ -28,7 +28,7 @@ public class mypanel extends JPanel{
 	public mypanel(int[][] thing){
 		this.image = thing;
 
-
+		//alkdjfoajweoi
 
 		repaint();
 	}
