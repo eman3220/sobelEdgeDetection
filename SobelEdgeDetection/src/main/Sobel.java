@@ -82,8 +82,8 @@ public class Sobel {
 			}
 
 			// merge tb and lr
-			for (int i = 0; i < bi.getHeight() - 1; i++) {
-				for (int j = 0; j < bi.getWidth() - 1; j++) {
+			for (int i = 0; i < bi.getHeight(); i++) {
+				for (int j = 0; j < bi.getWidth(); j++) {
 					int avg = (tb[j][i] + lr[j][i]) / 2;
 					output[j][i] = avg;
 				}
