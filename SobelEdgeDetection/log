@@ -1,6 +1,12 @@
 ==== To Do ====
 
 
-
 === Complete ===
+only allow pngs
+show comparison with original image
+display the output 2d array
+sweep the pixels, marking changes of pixel grayscale values on a similar sized array for output
+get grayscale values of each pixel
+get image into readable state (put in 2d array)
+input image through parameters 
 converted images to pngs

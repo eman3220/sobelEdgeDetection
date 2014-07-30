@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /**
  * Author: Emmanuel Godinez 300251168
@@ -19,6 +20,10 @@ public class Sobel {
 
 	public static void main(String[] args) {
 		if (args.length != 1) {
+			JOptionPane.showMessageDialog(null, "Only one arguement");
+			System.exit(0);
+		}else if(!args[0].endsWith(".png")){
+			JOptionPane.showMessageDialog(null, "Please only give me a png file");
 			System.exit(0);
 		}
 		String imagepath = args[0];
