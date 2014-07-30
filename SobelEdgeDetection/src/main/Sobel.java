@@ -1,16 +1,17 @@
 package main;
 
-import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.awt.image.Raster;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 
 /**
- * input: image file output: image file with edge detection highlights
+ * input: image file. Only use .png files.
+ * (note: tiff images don't seem to like java's BufferedImage class)
+ * output: image file with edge detection highlights
+ *
  */
 public class Sobel {
 
@@ -29,99 +30,72 @@ public class Sobel {
 	private int[][] output;
 
 	public Sobel(String imagepath) {
+
 		try {
-			BufferedImage bi = ImageIO.read(new File(imagepath));
-			Raster ras = bi.getData();
+			BufferedImage bi = null;
+			while(bi==null){
+				bi = ImageIO.read(new File(imagepath));
+			}
 
 			// create 2d array images
-			img = new int[ras.getWidth()][ras.getHeight()];
-			output = new int[ras.getWidth()][ras.getHeight()];
+			img = new int[bi.getHeight()][bi.getWidth()];
+			output = new int[bi.getWidth()][bi.getHeight()];
+			tb = new int[bi.getWidth()][bi.getHeight()];
+			lr = new int[bi.getWidth()][bi.getHeight()];
 
-			tb = new int[ras.getWidth()][ras.getHeight()];
-			lr = new int[ras.getWidth()][ras.getHeight()];
+			// read in image pixels
+			for (int i = 0; i < bi.getWidth(); i++) {
+				for (int j = 0; j < bi.getHeight(); j++) {
 
-			for (int i = 0; i < ras.getHeight(); i++) {
-				for (int j = 0; j < ras.getWidth(); j++) {
-
-					int rgb = bi.getRGB(j, i);
+					int rgb = bi.getRGB(i, j);
 					int r = (rgb >> 16) & 0xFF;
 					int g = (rgb >> 8) & 0xFF;
 					int b = (rgb & 0xFF);
-
 					int gray = (r + g + b) / 3;
 
 					img[j][i] = gray;
-
-					// System.out.print(gray+" ");
 				}
-				// System.out.println();
 			}
 
-			/*
-			 * // read image from array for(int i=0; i<ras.getHeight();i++){
-			 * for(int j=0; j<ras.getWidth();j++){
-			 * System.out.print(img[j][i]+" "); } System.out.println(); }
-			 */
-
-			// top to bottom sweep
-			for (int i = 0; i < ras.getHeight() - 1; i++) {
-				for (int j = 0; j < ras.getWidth() - 1; j++) {
-					// get current pixel
+			// sweep image to find edges
+			for (int i = 0; i < bi.getWidth() - 1; i++) {
+				for (int j = 0; j < bi.getHeight() - 1; j++) {
 					int current = img[j][i];
-					// check bottom pixel
 					int bottom = img[j][i + 1];
-					// get difference
-					int diff = Math.abs(bottom - current);
+					int bot_diff = Math.abs(bottom - current);
+					tb[j][i] = bot_diff;
 
-					// put into output array at the bottom pixel
-					tb[j][i] = diff;
+					int right = img[j + 1][i];
+					int right_diff = Math.abs(right - current);
+					lr[j][i] = right_diff;
 				}
 			}
 
-
-			// left to right sweep
-			for (int i = 0; i < ras.getHeight() - 1; i++) {
-				for (int j = 0; j < ras.getWidth() - 1; j++) {
-					// get current pixel
-					int current = img[j][i];
-					// check right pixel
-					int right = img[j+1][i];
-					// get difference
-					int diff = Math.abs(right - current);
-
-					// put into output array at the bottom pixel
-					lr[j][i] = diff;
+			// merge tb and lr
+			for (int i = 0; i < bi.getHeight() - 1; i++) {
+				for (int j = 0; j < bi.getWidth() - 1; j++) {
+					int avg = (tb[j][i] + lr[j][i]) / 2;
+					output[j][i] = avg;
 				}
 			}
-			printImage(lr);
 
-			// change this
-			for (int i = 0; i < ras.getHeight(); i++) {
-				for (int j = 0; j < ras.getWidth(); j++) {
-
-					int rgb = bi.getRGB(j, i);
-					int r = (rgb >> 16) & 0xFF;
-					int g = (rgb >> 8) & 0xFF;
-					int b = (rgb & 0xFF);
-
-					int gray = (r + g + b) / 3;
-
-					img[j][i] = gray;
-
-					// System.out.print(gray+" ");
-				}
-				// System.out.println();
-			}
+			// draw to frame
+			JFrame frame = new JFrame();
+			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+			frame.setSize((bi.getHeight() + 80), (bi.getWidth() + 80));
+			frame.setVisible(true);
+			frame.add(new mypanel(this.output));
 
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	private void printImage(int[][] array){
-		for(int i=0;i<array.length;i++){
-			for(int j=0;j<array[i].length;j++){
-				System.out.print(array[i][j]+" ");
+	private void printImage(int[][] array) {
+		for (int i = 0; i < array.length; i++) {
+			for (int j = 0; j < array[i].length; j++) {
+				System.out.print(array[i][j] + " ");
 			}
 			System.out.println();
 		}
