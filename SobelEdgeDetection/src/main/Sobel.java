@@ -11,9 +11,8 @@ import javax.swing.JOptionPane;
 /**
  * Author: Emmanuel Godinez 300251168
  *
- * input: image file. Only use .png files.
- * (note: tiff images don't seem to like java's BufferedImage class)
- * output: image file with edge detection highlights
+ * input: image file. Only use .png files. (note: tiff images don't seem to like
+ * java's BufferedImage class) output: image file with edge detection highlights
  *
  */
 public class Sobel {
@@ -22,8 +21,9 @@ public class Sobel {
 		if (args.length != 1) {
 			JOptionPane.showMessageDialog(null, "Only one arguement");
 			System.exit(0);
-		}else if(!args[0].endsWith(".png")){
-			JOptionPane.showMessageDialog(null, "Please only give me a png file");
+		} else if (!args[0].endsWith(".png")) {
+			JOptionPane.showMessageDialog(null,
+					"Please only give me a png file");
 			System.exit(0);
 		}
 		String imagepath = args[0];
@@ -40,7 +40,7 @@ public class Sobel {
 
 		try {
 			BufferedImage bi = null;
-			while(bi==null){
+			while (bi == null) {
 				bi = ImageIO.read(new File(imagepath));
 			}
 
@@ -60,14 +60,13 @@ public class Sobel {
 					int b = (rgb & 0xFF);
 					int gray = (r + g + b) / 3;
 
-					img[j][i] = gray*2;
+					img[j][i] = gray * 2;
 				}
 			}
 
-			//display original image
+			// display original image
 			JFrame frame1 = new JFrame("Original");
 			frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			frame1.setExtendedState(JFrame.MAXIMIZED_BOTH);
 			frame1.setSize((bi.getHeight() + 80), (bi.getWidth() + 80));
 			frame1.setVisible(true);
 			frame1.add(new mypanel(this.img));
@@ -75,14 +74,19 @@ public class Sobel {
 			// sweep image to find edges
 			for (int i = 0; i < bi.getWidth() - 1; i++) {
 				for (int j = 0; j < bi.getHeight() - 1; j++) {
-					int current = img[j][i];
-					int bottom = img[j][i + 1];
-					int bot_diff = Math.abs(bottom - current);
-					tb[j][i] = bot_diff;
+					try {
+						int current = img[j][i];
+						int bottom = img[j][i + 1];
+						int bot_diff = Math.abs(bottom - current);
+						tb[j][i] = bot_diff;
 
-					int right = img[j + 1][i];
-					int right_diff = Math.abs(right - current);
-					lr[j][i] = right_diff;
+						int right = img[j + 1][i];
+						int right_diff = Math.abs(right - current);
+						System.out.println(j);
+						lr[j][i] = right_diff;
+					} catch (ArrayIndexOutOfBoundsException e) {
+						continue;
+					}
 				}
 			}
 
@@ -93,13 +97,13 @@ public class Sobel {
 					output[j][i] = avg;
 				}
 			}
-			// NOTE: we could just skip this entirely. just find a way to put everything
+			// NOTE: we could just skip this entirely. just find a way to put
+			// everything
 			// into the final 2d array
 
 			// draw to frame
 			JFrame frame2 = new JFrame("Edges");
 			frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			frame2.setExtendedState(JFrame.MAXIMIZED_BOTH);
 			frame2.setSize((bi.getHeight() + 80), (bi.getWidth() + 80));
 			frame2.setVisible(true);
 			frame2.add(new mypanel(this.output));

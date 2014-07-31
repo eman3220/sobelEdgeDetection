@@ -1,7 +1,8 @@
 ==== To Do ====
-
+use the formulae on the notes to apply sobel operator
 
 === Complete ===
+test with colour image (converts to grayscale anyway)
 only allow pngs
 show comparison with original image
 display the output 2d array
